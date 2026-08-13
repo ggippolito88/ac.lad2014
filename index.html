@@ -206,27 +206,20 @@ function showToast(msg){
   window.__toastTimer = setTimeout(()=>t.classList.remove('show'), 1800);
 }
 
-const GIST_ID = "04da13b46c77f17775bdfa266c7e063b";
-const GIST_FILENAME = "gistfile1.txt";
-const GITHUB_TOKEN = "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";
-const GIST_API_URL = "https://api.github.com/gists/" + GIST_ID;
+const JSONBIN_BIN_ID = "6a7e1de2da38895dfee131cb";
+const JSONBIN_MASTER_KEY = "$2a$10$ZrAd8OJddjAXn/ROxWNyM.aVKA57xtYUtsCsvQoiyzwK0CP1T1Oba";
+const JSONBIN_BASE_URL = "https://api.jsonbin.io/v3/b/" + JSONBIN_BIN_ID;
 
 function sleep(ms){ return new Promise(r=>setTimeout(r,ms)); }
 
 async function fetchCloudData(){
   try{
-    const res = await fetch(GIST_API_URL, {
-      headers: {
-        'Authorization': 'token ' + GITHUB_TOKEN,
-        'Accept': 'application/vnd.github+json'
-      }
+    const res = await fetch(JSONBIN_BASE_URL + "/latest", {
+      headers: { "X-Master-Key": JSONBIN_MASTER_KEY }
     });
     if(!res.ok) throw new Error('HTTP ' + res.status);
     const json = await res.json();
-    const file = json.files && json.files[GIST_FILENAME];
-    const raw = file ? file.content : '{}';
-    let data = {};
-    try{ data = JSON.parse(raw || '{}'); }catch(e){ data = {}; }
+    const data = json.record || {};
     return {
       authPassword: data.authPassword || null,
       roster: Array.isArray(data.roster) ? data.roster : [],
@@ -241,14 +234,13 @@ async function fetchCloudData(){
 async function pushCloudData(dataObj, attempt){
   attempt = attempt || 1;
   try{
-    const res = await fetch(GIST_API_URL, {
-      method: 'PATCH',
+    const res = await fetch(JSONBIN_BASE_URL, {
+      method: 'PUT',
       headers: {
-        'Authorization': 'token ' + GITHUB_TOKEN,
-        'Accept': 'application/vnd.github+json',
-        'Content-Type': 'application/json'
+        "Content-Type": "application/json",
+        "X-Master-Key": JSONBIN_MASTER_KEY
       },
-      body: JSON.stringify({ files: { [GIST_FILENAME]: { content: JSON.stringify(dataObj, null, 2) } } })
+      body: JSON.stringify(dataObj)
     });
     if(!res.ok) throw new Error('HTTP ' + res.status);
     return true;
