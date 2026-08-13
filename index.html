@@ -1,0 +1,965 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+<title>Academy Ladispoli — Esordienti 2° anno 2014</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Oswald:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --navy:#10214A;
+  --navy-deep:#0A1730;
+  --navy-mid:#1B3266;
+  --red:#C81E2D;
+  --red-deep:#9E1622;
+  --white:#FFFFFF;
+  --paper:#F3F4F7;
+  --paper-2:#E7E9EF;
+  --ink:#10214A;
+  --ink-soft:#51607E;
+  --line:#D6DAE4;
+  --shadow: 0 2px 10px rgba(16,33,74,0.08);
+}
+*{box-sizing:border-box;}
+body{margin:0;padding:0;background:var(--paper);color:var(--ink);font-family:'Inter',sans-serif;-webkit-font-smoothing:antialiased;}
+.app{max-width:960px;margin:0 auto;min-height:100vh;display:flex;flex-direction:column;}
+
+/* ---- Header ---- */
+.topbar{background:var(--navy-deep);color:var(--white);padding:16px 20px 0;position:relative;overflow:hidden;}
+.topbar::before{content:"";position:absolute;inset:0;background:linear-gradient(180deg, var(--navy-deep) 0%, var(--navy) 140%);}
+.topbar::after{content:"";position:absolute;left:0;right:0;bottom:0;height:4px;background:linear-gradient(90deg, var(--red) 0 33%, var(--white) 33% 66%, var(--navy-mid) 66% 100%);}
+.topbar-row{display:flex;align-items:center;gap:12px;position:relative;z-index:1;padding-bottom:14px;}
+.logo-img{width:44px;height:44px;object-fit:contain;flex-shrink:0;filter:drop-shadow(0 2px 4px rgba(0,0,0,0.3));}
+.brand{flex:1;min-width:0;}
+.brand-mark{font-family:'Archivo Black',sans-serif;font-size:16px;letter-spacing:0.3px;line-height:1.15;}
+.brand-sub{font-family:'Oswald',sans-serif;font-size:10.5px;letter-spacing:1.8px;text-transform:uppercase;color:#8FA1D4;margin-top:2px;}
+.header-actions{display:flex;gap:8px;flex-shrink:0;}
+.icon-btn{background:transparent;border:1px solid rgba(255,255,255,0.25);color:rgba(255,255,255,0.75);font-family:'Oswald',sans-serif;font-size:10.5px;letter-spacing:1px;text-transform:uppercase;padding:6px 10px;border-radius:3px;cursor:pointer;white-space:nowrap;}
+.icon-btn:hover{border-color:rgba(255,255,255,0.6);color:var(--white);}
+
+.tabs{display:flex;gap:2px;background:var(--navy-deep);padding:0 20px;position:relative;z-index:1;overflow-x:auto;}
+.tab{font-family:'Oswald',sans-serif;font-size:12.5px;letter-spacing:1.2px;text-transform:uppercase;color:rgba(255,255,255,0.55);background:transparent;border:none;padding:12px 14px 10px;cursor:pointer;white-space:nowrap;border-bottom:3px solid transparent;}
+.tab.active{color:var(--white);border-bottom-color:var(--red);}
+.tab:hover:not(.active){color:rgba(255,255,255,0.85);}
+
+main{flex:1;padding:20px;}
+
+/* ---- shared ---- */
+h2.section-title{font-family:'Archivo Black',sans-serif;font-size:19px;margin:0 0 4px;color:var(--navy);}
+.section-sub{font-family:'Oswald',sans-serif;font-size:11.5px;letter-spacing:1.5px;text-transform:uppercase;color:var(--ink-soft);margin:0 0 16px;}
+.card{background:var(--white);border:1px solid var(--line);border-radius:6px;box-shadow:var(--shadow);}
+.btn{font-family:'Oswald',sans-serif;font-size:12.5px;letter-spacing:1px;text-transform:uppercase;border-radius:4px;border:none;padding:10px 16px;cursor:pointer;transition:transform .06s ease;}
+.btn:active{transform:scale(0.97);}
+.btn-primary{background:var(--navy);color:var(--white);}
+.btn-primary:hover{background:var(--navy-mid);}
+.btn-accent{background:var(--red);color:var(--white);}
+.btn-accent:hover{background:var(--red-deep);}
+.btn-ghost{background:transparent;color:var(--navy);border:1px solid var(--line);}
+.btn-ghost:hover{border-color:var(--navy);}
+.btn-danger{background:transparent;color:var(--red);border:1px solid rgba(200,30,45,0.35);}
+.btn-danger:hover{background:rgba(200,30,45,0.08);}
+.btn-sm{padding:6px 10px;font-size:11px;}
+input,select,textarea{font-family:'Inter',sans-serif;font-size:14px;color:var(--ink);border:1px solid var(--line);border-radius:4px;padding:9px 11px;background:var(--white);width:100%;}
+input:focus,select:focus,textarea:focus{outline:none;border-color:var(--navy);}
+label{font-family:'Oswald',sans-serif;font-size:10.5px;letter-spacing:1.2px;text-transform:uppercase;color:var(--ink-soft);display:block;margin-bottom:5px;}
+.field{margin-bottom:12px;}
+.row{display:flex;gap:10px;}
+.row > .field{flex:1;}
+.num{font-family:'JetBrains Mono',monospace;font-variant-numeric:tabular-nums;}
+.empty{padding:36px 20px;text-align:center;color:var(--ink-soft);font-size:14px;}
+.badge{display:inline-flex;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;font-weight:700;width:30px;height:30px;border-radius:50%;background:var(--paper-2);color:var(--navy);font-size:13px;flex-shrink:0;border:1.5px solid var(--line);}
+.badge.group-A{border-color:var(--navy);color:var(--navy);}
+.badge.group-B{border-color:var(--red);color:var(--red);}
+.badge.group-{border-style:dashed;}
+.tag{font-family:'Oswald',sans-serif;font-size:10px;letter-spacing:1px;text-transform:uppercase;padding:3px 8px;border-radius:20px;background:var(--paper-2);color:var(--ink-soft);}
+.tag.group-A{background:rgba(16,33,74,0.10);color:var(--navy);}
+.tag.group-B{background:rgba(200,30,45,0.10);color:var(--red);}
+.role-tag{font-family:'Oswald',sans-serif;font-size:10px;letter-spacing:0.5px;color:var(--ink-soft);}
+.divider{height:1px;background:var(--line);margin:0;}
+.fab-row{display:flex;justify-content:flex-end;gap:8px;margin-bottom:14px;flex-wrap:wrap;}
+.modal-backdrop{position:fixed;inset:0;background:rgba(10,23,48,0.5);display:flex;align-items:center;justify-content:center;z-index:50;padding:16px;}
+.modal{background:var(--white);border-radius:8px;padding:22px;max-width:440px;width:100%;max-height:88vh;overflow-y:auto;box-shadow:0 12px 40px rgba(0,0,0,0.3);}
+.modal h3{font-family:'Archivo Black',sans-serif;font-size:16px;margin:0 0 16px;color:var(--navy);}
+.modal-actions{display:flex;gap:8px;justify-content:flex-end;margin-top:16px;}
+.toast{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);background:var(--navy-deep);color:var(--white);font-family:'Oswald',sans-serif;font-size:12.5px;letter-spacing:0.8px;padding:10px 18px;border-radius:5px;z-index:60;opacity:0;pointer-events:none;transition:opacity .25s ease;}
+.toast.show{opacity:1;}
+
+/* ---- Login ---- */
+.login-wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;background:var(--navy-deep);position:relative;overflow:hidden;padding:20px;}
+.login-wrap::before{content:"";position:absolute;inset:0;background:linear-gradient(160deg, var(--navy-deep) 0%, var(--navy) 100%);}
+.login-card{position:relative;z-index:1;background:var(--paper);border-radius:10px;padding:34px 30px;max-width:360px;width:100%;box-shadow:0 20px 60px rgba(0,0,0,0.4);text-align:center;}
+.login-logo{width:76px;height:76px;object-fit:contain;margin:0 auto 14px;display:block;}
+.login-mark{font-family:'Archivo Black',sans-serif;font-size:17px;color:var(--navy);line-height:1.25;}
+.login-sub{font-family:'Oswald',sans-serif;font-size:11px;letter-spacing:2.2px;text-transform:uppercase;color:var(--red);margin:6px 0 24px;}
+.login-error{color:var(--red);font-size:12.5px;margin-top:8px;font-family:'Oswald',sans-serif;letter-spacing:0.4px;}
+.login-hint{font-size:12px;color:var(--ink-soft);margin-top:14px;line-height:1.5;}
+
+/* ---- Roster ---- */
+.player-row{display:flex;align-items:center;gap:12px;padding:12px 14px;}
+.player-name{font-weight:600;font-size:14.5px;}
+.player-meta{display:flex;gap:6px;align-items:center;margin-top:3px;flex-wrap:wrap;}
+.player-actions{margin-left:auto;display:flex;gap:6px;flex-shrink:0;}
+.group-toggle{display:flex;gap:6px;margin-bottom:16px;}
+.group-toggle button{flex:1;}
+.group-switch-btn{font-family:'Oswald',sans-serif;font-size:10px;letter-spacing:0.5px;text-transform:uppercase;background:transparent;border:1px dashed var(--line);color:var(--ink-soft);border-radius:20px;padding:2px 8px;cursor:pointer;}
+.group-switch-btn:hover{border-color:var(--navy);color:var(--navy);}
+
+/* ---- Matches list ---- */
+.match-row{display:flex;align-items:center;gap:14px;padding:14px;cursor:pointer;}
+.match-row:hover{background:var(--paper-2);}
+.match-date{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--ink-soft);width:64px;flex-shrink:0;}
+.match-opp{font-weight:600;font-size:14.5px;flex:1;}
+.match-score{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:16px;color:var(--navy);}
+.status-pill{font-family:'Oswald',sans-serif;font-size:9.5px;letter-spacing:1px;text-transform:uppercase;padding:3px 8px;border-radius:20px;}
+.status-programmata{background:var(--paper-2);color:var(--ink-soft);}
+.status-in-corso{background:rgba(200,30,45,0.14);color:var(--red);}
+.status-conclusa{background:rgba(16,33,74,0.10);color:var(--navy);}
+
+/* ---- Match detail ---- */
+.back-link{font-family:'Oswald',sans-serif;font-size:12px;letter-spacing:1px;text-transform:uppercase;color:var(--ink-soft);cursor:pointer;display:inline-block;margin-bottom:14px;}
+.back-link:hover{color:var(--navy);}
+.match-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:10px;}
+.score-editor{display:flex;align-items:center;gap:8px;font-family:'JetBrains Mono',monospace;}
+.score-editor input{width:44px;text-align:center;font-weight:700;font-size:16px;padding:6px;}
+.field-panel{padding:16px;}
+.lineup-row{display:flex;align-items:center;gap:10px;padding:10px 14px;}
+.lineup-min-input{width:64px;text-align:center;flex-shrink:0;}
+.goal-btn{width:34px;height:34px;border-radius:50%;border:1.5px solid var(--red);background:var(--white);color:var(--red);cursor:pointer;font-size:15px;flex-shrink:0;}
+.goal-btn:hover{background:rgba(200,30,45,0.08);}
+.goal-list-item{display:flex;align-items:center;gap:10px;padding:8px 14px;font-size:13.5px;}
+.goal-list-item .num{color:var(--ink-soft);}
+.chip-select{display:flex;flex-wrap:wrap;gap:7px;}
+.chip{font-family:'Oswald',sans-serif;font-size:11.5px;letter-spacing:0.5px;padding:7px 12px;border-radius:20px;border:1.5px solid var(--line);background:var(--white);cursor:pointer;}
+.chip.selected{background:var(--navy);border-color:var(--navy);color:var(--white);}
+
+/* ---- Stats ---- */
+.player-stat-block{padding:14px;}
+.player-stat-block + .player-stat-block{border-top:1px solid var(--line);}
+.player-stat-head{display:flex;align-items:center;gap:10px;margin-bottom:2px;}
+.player-stat-totals{font-family:'JetBrains Mono',monospace;font-size:12.5px;color:var(--ink-soft);margin-left:auto;text-align:right;}
+.match-history-item{display:flex;align-items:center;gap:8px;font-size:12.5px;color:var(--ink-soft);padding:4px 0 4px 42px;}
+.match-history-item .num{font-family:'JetBrains Mono',monospace;color:var(--navy);}
+.stat-toggle{background:transparent;border:none;color:var(--navy);font-family:'Oswald',sans-serif;font-size:10.5px;letter-spacing:1px;text-transform:uppercase;cursor:pointer;padding:4px 0 0 42px;}
+
+/* ---- Notes ---- */
+textarea.notes-area{min-height:120px;resize:vertical;line-height:1.5;font-size:14px;}
+
+@media (max-width:520px){
+  .topbar{padding:14px 14px 0;}
+  .tabs{padding:0 14px;}
+  main{padding:14px;}
+  .match-header{align-items:flex-start;}
+  .brand-mark{font-size:14px;}
+}
+</style>
+</head>
+<body>
+<div id="root"></div>
+
+<script>
+const LOGO_SRC = "data:image/jpeg;base64,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";
+const ROLES = {
+  'Portiere': [],
+  'Difensore': ['Centrale','Terzino destro','Terzino sinistro'],
+  'Centrocampista': ['Centrale','Mediano','Esterno destro','Esterno sinistro','Trequartista'],
+  'Attaccante': ['Centravanti','Ala destra','Ala sinistra'],
+};
+
+let state = {
+  authed: false,
+  authChecked: false,
+  password: null,
+  roster: [],
+  matches: [],
+  tab: 'rosa',
+  rosterGroupFilter: '',
+  matchesGroupTab: 'A', // used only when tab==='partite'
+  openMatchId: null,
+  modal: null,
+  loginInput: '',
+  loginError: '',
+  loginMode: null,
+  expandedStatPlayer: null,
+};
+
+const ROLE_ORDER = { 'Portiere':0, 'Difensore':1, 'Centrocampista':2, 'Attaccante':3, '':4 };
+function comparePlayers(a,b){
+  const ra = ROLE_ORDER[a.role||''] ?? 4;
+  const rb = ROLE_ORDER[b.role||''] ?? 4;
+  if(ra !== rb) return ra - rb;
+  return (a.number||99) - (b.number||99);
+}
+
+function askDoubleConfirm(message1, message2, onConfirm){
+  state.modal = { type:'confirm', stage:1, message1, message2, onConfirm };
+  render();
+}
+
+function uid(){ return Math.random().toString(36).slice(2,10); }
+function showToast(msg){
+  const t = document.getElementById('toast');
+  if(!t) return;
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(window.__toastTimer);
+  window.__toastTimer = setTimeout(()=>t.classList.remove('show'), 1800);
+}
+
+const GIST_ID = "04da13b46c77f17775bdfa266c7e063b";
+const GIST_FILENAME = "gistfile1.txt";
+const GITHUB_TOKEN = "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";
+const GIST_API_URL = "https://api.github.com/gists/" + GIST_ID;
+
+function sleep(ms){ return new Promise(r=>setTimeout(r,ms)); }
+
+async function fetchCloudData(){
+  try{
+    const res = await fetch(GIST_API_URL, {
+      headers: {
+        'Authorization': 'token ' + GITHUB_TOKEN,
+        'Accept': 'application/vnd.github+json'
+      }
+    });
+    if(!res.ok) throw new Error('HTTP ' + res.status);
+    const json = await res.json();
+    const file = json.files && json.files[GIST_FILENAME];
+    const raw = file ? file.content : '{}';
+    let data = {};
+    try{ data = JSON.parse(raw || '{}'); }catch(e){ data = {}; }
+    return {
+      authPassword: data.authPassword || null,
+      roster: Array.isArray(data.roster) ? data.roster : [],
+      matches: Array.isArray(data.matches) ? data.matches : [],
+    };
+  }catch(e){
+    console.error('fetchCloudData failed', e);
+    return null;
+  }
+}
+
+async function pushCloudData(dataObj, attempt){
+  attempt = attempt || 1;
+  try{
+    const res = await fetch(GIST_API_URL, {
+      method: 'PATCH',
+      headers: {
+        'Authorization': 'token ' + GITHUB_TOKEN,
+        'Accept': 'application/vnd.github+json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ files: { [GIST_FILENAME]: { content: JSON.stringify(dataObj, null, 2) } } })
+    });
+    if(!res.ok) throw new Error('HTTP ' + res.status);
+    return true;
+  }catch(e){
+    console.error('pushCloudData failed (attempt '+attempt+')', e);
+    if(attempt < 3){
+      await sleep(600 * attempt);
+      return pushCloudData(dataObj, attempt+1);
+    }
+    showToast('Salvataggio non riuscito: controlla la connessione e riprova');
+    return false;
+  }
+}
+
+function currentCloudSnapshot(){
+  return { authPassword: state.password, roster: state.roster, matches: state.matches };
+}
+
+async function saveRoster(){ await pushCloudData(currentCloudSnapshot()); }
+async function saveMatches(){ await pushCloudData(currentCloudSnapshot()); }
+
+async function checkAuth(){
+  const data = await fetchCloudData();
+  if(data === null){
+    state.authChecked = true;
+    state.loadError = true;
+    render();
+    return;
+  }
+  state.password = data.authPassword;
+  state.roster = data.roster;
+  state.matches = data.matches;
+  state.loginMode = state.password ? 'enter' : 'set';
+  state.authChecked = true;
+  state.loadError = false;
+  render();
+}
+
+async function handleLoginSubmit(){
+  const val = state.loginInput.trim();
+  if(!val){ state.loginError = 'Inserisci una password.'; render(); return; }
+  if(state.loginMode === 'set'){
+    if(val.length < 4){ state.loginError = 'Usa almeno 4 caratteri.'; render(); return; }
+    state.password = val;
+    const ok = await pushCloudData(currentCloudSnapshot());
+    if(!ok){ state.loginError = 'Errore di connessione. Riprova.'; render(); return; }
+    state.authed = true;
+    render();
+    startPolling();
+  } else {
+    if(val === state.password){
+      state.authed = true;
+      render();
+      startPolling();
+    } else {
+      state.loginError = 'Password errata.';
+      render();
+    }
+  }
+}
+
+function logout(){ state.authed = false; state.loginInput=''; state.loginError=''; render(); }
+
+/* ---------- Backup export ---------- */
+function exportBackup(){
+  const data = { exportedAt: new Date().toISOString(), roster: state.roster, matches: state.matches };
+  const blob = new Blob([JSON.stringify(data,null,2)], {type:'application/json'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'academy-ladispoli-backup-' + new Date().toISOString().slice(0,10) + '.json';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+  showToast('Backup scaricato');
+}
+
+/* ---------- Polling for multi-user sync ---------- */
+function isEditingNow(){
+  if(state.modal) return true;
+  const el = document.activeElement;
+  if(!el) return false;
+  const tag = el.tagName;
+  return tag==='INPUT' || tag==='TEXTAREA' || tag==='SELECT';
+}
+function startPolling(){
+  if(window.__pollTimer) return;
+  window.__pollTimer = setInterval(async ()=>{
+    if(!state.authed || isEditingNow()) return;
+    const data = await fetchCloudData();
+    if(data){
+      state.password = data.authPassword;
+      state.roster = data.roster;
+      state.matches = data.matches;
+      render();
+    }
+  }, 7000);
+}
+
+/* ---------- Goals / helpers ---------- */
+async function addGoal(matchId, playerId){
+  const match = state.matches.find(m=>m.id===matchId);
+  if(!match) return;
+  if(!match.goals) match.goals = [];
+  match.goals.push({id:uid(), playerId, minute:null});
+  match.ourScore = (match.ourScore||0) + 1;
+  await saveMatches();
+  showToast('Gol registrato');
+  render();
+}
+async function removeGoal(matchId, goalId){
+  const match = state.matches.find(m=>m.id===matchId);
+  if(!match) return;
+  const idx = match.goals.findIndex(g=>g.id===goalId);
+  if(idx>-1){
+    match.goals.splice(idx,1);
+    match.ourScore = Math.max(0,(match.ourScore||0) - 1);
+  }
+  await saveMatches();
+  render();
+}
+async function setGoalMinute(matchId, goalId, minuteStr){
+  const match = state.matches.find(m=>m.id===matchId);
+  if(!match) return;
+  const g = match.goals.find(x=>x.id===goalId);
+  if(!g) return;
+  const val = parseInt(minuteStr,10);
+  g.minute = isNaN(val) ? null : val;
+  await saveMatches();
+}
+async function setPlayerMinutes(matchId, playerId, minutesStr){
+  const match = state.matches.find(m=>m.id===matchId);
+  if(!match) return;
+  if(!match.minutes) match.minutes = {};
+  const val = parseInt(minutesStr,10);
+  match.minutes[playerId] = isNaN(val) ? 0 : val;
+  await saveMatches();
+}
+
+/* ---------- Rendering ---------- */
+function render(){
+  const root = document.getElementById('root');
+  if(!state.authChecked){ root.innerHTML = ''; return; }
+  if(state.loadError){ root.innerHTML = renderLoadError(); attachLoadErrorHandlers(); return; }
+  if(!state.authed){ root.innerHTML = renderLogin(); attachLoginHandlers(); return; }
+  root.innerHTML = `
+    <div class="app">
+      <div class="topbar">
+        <div class="topbar-row">
+          <img src="${LOGO_SRC}" class="logo-img" alt="Logo Academy Ladispoli">
+          <div class="brand">
+            <div class="brand-mark">Academy Ladispoli</div>
+            <div class="brand-sub">Esordienti 2° anno 2014</div>
+          </div>
+          <div class="header-actions">
+            <button class="icon-btn" id="backupBtn">Backup</button>
+            <button class="icon-btn" id="logoutBtn">Esci</button>
+          </div>
+        </div>
+      </div>
+      <div class="tabs">
+        ${tabBtn('rosa','Rosa')}
+        ${tabBtn('partite','Partite')}
+        ${tabBtn('statistiche','Statistiche')}
+      </div>
+      <main id="mainContent"></main>
+    </div>
+    <div id="toast" class="toast"></div>
+  `;
+  document.getElementById('logoutBtn').onclick = logout;
+  document.getElementById('backupBtn').onclick = exportBackup;
+  document.querySelectorAll('.tab').forEach(b=>b.onclick = ()=>{ state.tab = b.dataset.tab; state.openMatchId=null; render(); });
+  const main = document.getElementById('mainContent');
+  if(state.tab==='rosa') main.innerHTML = renderRosa();
+  else if(state.tab==='partite'){
+    if(state.openMatchId) main.innerHTML = renderMatchDetail();
+    else main.innerHTML = renderPartiteList();
+  }
+  else if(state.tab==='statistiche') main.innerHTML = renderStats();
+  attachContentHandlers();
+  if(state.modal) renderModal();
+}
+
+function tabBtn(id,label){
+  return `<button class="tab ${state.tab===id?'active':''}" data-tab="${id}">${label}</button>`;
+}
+
+function renderLoadError(){
+  return `
+    <div class="login-wrap">
+      <div class="login-card">
+        <img src="${LOGO_SRC}" class="login-logo" alt="Logo Academy Ladispoli">
+        <div class="login-mark">Academy Ladispoli<br>Esordienti 2° anno 2014</div>
+        <div class="login-error" style="margin-top:14px;">Impossibile collegarsi al database. Controlla la connessione internet e riprova.</div>
+        <button class="btn btn-accent" id="retryLoadBtn" style="width:100%;margin-top:16px;">Riprova</button>
+      </div>
+    </div>
+  `;
+}
+function attachLoadErrorHandlers(){
+  document.getElementById('retryLoadBtn').onclick = checkAuth;
+}
+
+function renderLogin(){
+  const isSet = state.loginMode==='set';
+  return `
+    <div class="login-wrap">
+      <div class="login-card">
+        <img src="${LOGO_SRC}" class="login-logo" alt="Logo Academy Ladispoli">
+        <div class="login-mark">Academy Ladispoli<br>Esordienti 2° anno 2014</div>
+        <div class="login-sub">${isSet? 'Imposta la password' : 'Accedi alla squadra'}</div>
+        <div class="field" style="text-align:left;">
+          <label>Password</label>
+          <input type="password" id="loginPwd" value="${state.loginInput.replace(/"/g,'&quot;')}" placeholder="${isSet?'Crea una password di squadra':'Inserisci la password'}">
+        </div>
+        ${state.loginError? `<div class="login-error">${state.loginError}</div>`:''}
+        <button class="btn btn-accent" id="loginBtn" style="width:100%;margin-top:12px;">${isSet? 'Crea e Entra' : 'Entra'}</button>
+        <div class="login-hint">${isSet? 'Questa sarà la password unica condivisa con mister e collaboratori per modificare i dati della squadra.' : 'Password condivisa per la gestione della squadra.'}</div>
+      </div>
+    </div>
+  `;
+}
+function attachLoginHandlers(){
+  const input = document.getElementById('loginPwd');
+  const btn = document.getElementById('loginBtn');
+  input.oninput = (e)=>{ state.loginInput = e.target.value; };
+  input.onkeydown = (e)=>{ if(e.key==='Enter') handleLoginSubmit(); };
+  btn.onclick = handleLoginSubmit;
+  input.focus();
+}
+
+function roleLabel(p){
+  if(!p.role) return '';
+  return p.subrole ? `${p.role} · ${p.subrole}` : p.role;
+}
+
+function groupSwitchButtons(p){
+  if(p.group===''){
+    return `<button class="group-switch-btn" data-set-group="${p.id}|A">→ metti in A</button><button class="group-switch-btn" data-set-group="${p.id}|B">→ metti in B</button>`;
+  }
+  const other = p.group==='A' ? 'B' : 'A';
+  return `<button class="group-switch-btn" data-set-group="${p.id}|${other}">→ passa al ${other}</button>`;
+}
+function groupLabel(g){
+  return g==='' ? 'Non assegnato' : 'Gruppo ' + g;
+}
+function renderRosa(){
+  const filterVal = state.rosterGroupFilter;
+  const filtered = state.roster.filter(p=>p.group===filterVal).sort(comparePlayers);
+  const rows = filtered.map(p=>`
+    <div class="player-row">
+      <div class="badge group-${p.group}">${p.number ?? '–'}</div>
+      <div style="min-width:0;">
+        <div class="player-name">${escapeHtml(p.name)}</div>
+        <div class="player-meta">
+          <span class="tag group-${p.group}">${groupLabel(p.group)}</span>
+          ${p.role? `<span class="role-tag">${escapeHtml(roleLabel(p))}</span>`:''}
+          ${groupSwitchButtons(p)}
+        </div>
+      </div>
+      <div class="player-actions">
+        <button class="btn btn-ghost btn-sm" data-edit-player="${p.id}">Modifica</button>
+        ${p.group!==''? `<button class="btn btn-ghost btn-sm" data-unassign-player="${p.id}">Togli dal gruppo</button>`:''}
+        <button class="btn btn-danger btn-sm" data-del-player="${p.id}">Elimina</button>
+      </div>
+    </div>
+    <div class="divider"></div>
+  `).join('');
+  const unassignedCount = state.roster.filter(p=>p.group==='').length;
+  return `
+    <h2 class="section-title">Rosa</h2>
+    <div class="section-sub">${state.roster.length} giocatori in rosa</div>
+    <div class="group-toggle">
+      <button class="btn ${filterVal===''?'btn-primary':'btn-ghost'}" data-group-filter="">Non assegnati (${unassignedCount})</button>
+      <button class="btn ${filterVal==='A'?'btn-primary':'btn-ghost'}" data-group-filter="A">Gruppo A (${state.roster.filter(p=>p.group==='A').length})</button>
+      <button class="btn ${filterVal==='B'?'btn-accent':'btn-ghost'}" data-group-filter="B">Gruppo B (${state.roster.filter(p=>p.group==='B').length})</button>
+    </div>
+    <div class="fab-row"><button class="btn btn-accent" id="addPlayerBtn">+ Aggiungi Giocatore</button></div>
+    <div class="card">
+      ${filtered.length? rows : `<div class="empty">Nessun giocatore in questa categoria.</div>`}
+    </div>
+  `;
+}
+
+function renderPartiteList(){
+  const g = state.matchesGroupTab;
+  const list = state.matches.filter(m=>m.group===g).sort((a,b)=> (b.date||'').localeCompare(a.date||''));
+  const rows = list.map(m=>`
+    <div class="match-row" data-open-match="${m.id}">
+      <div class="match-date">${fmtDateShort(m.date)}</div>
+      <div class="match-opp">vs ${escapeHtml(m.opponent||'—')} <span class="status-pill status-${(m.status||'programmata').replace(' ','-')}">${m.status||'programmata'}</span></div>
+      <div class="match-score">${m.ourScore ?? 0}–${m.oppScore ?? 0}</div>
+    </div>
+    <div class="divider"></div>
+  `).join('');
+  return `
+    <h2 class="section-title">Partite</h2>
+    <div class="section-sub">Elenchi separati per gruppo</div>
+    <div class="group-toggle">
+      <button class="btn ${g==='A'?'btn-primary':'btn-ghost'}" data-matches-group="A">Gruppo A (${state.matches.filter(m=>m.group==='A').length})</button>
+      <button class="btn ${g==='B'?'btn-accent':'btn-ghost'}" data-matches-group="B">Gruppo B (${state.matches.filter(m=>m.group==='B').length})</button>
+    </div>
+    <div class="fab-row"><button class="btn btn-accent" id="addMatchBtn">+ Nuova Partita Gruppo ${g}</button></div>
+    <div class="card">
+      ${list.length? rows : `<div class="empty">Nessuna partita ancora nel gruppo ${g}.</div>`}
+    </div>
+  `;
+}
+
+function renderMatchDetail(){
+  const m = state.matches.find(x=>x.id===state.openMatchId);
+  if(!m) return `<div class="empty">Partita non trovata.</div>`;
+  const convocatiSet = new Set(m.convocati||[]);
+  const otherGroup = m.group==='A' ? 'B' : 'A';
+  const ownGroupPlayers = state.roster.filter(p=>p.group===m.group);
+  const otherGroupPlayers = state.roster.filter(p=>p.group===otherGroup);
+  const convocatiPlayers = state.roster.filter(p=>convocatiSet.has(p.id)).sort(comparePlayers);
+  const nonConvocatiOwn = ownGroupPlayers.filter(p=>!convocatiSet.has(p.id)).sort(comparePlayers);
+  const nonConvocatiOther = otherGroupPlayers.filter(p=>!convocatiSet.has(p.id)).sort(comparePlayers);
+
+  const lineupRows = convocatiPlayers.map(p=>{
+    const mins = (m.minutes||{})[p.id] ?? '';
+    const guest = p.group !== m.group;
+    return `
+      <div class="lineup-row">
+        <div class="badge group-${p.group}" style="width:26px;height:26px;font-size:11px;">${p.number??'–'}</div>
+        <div style="flex:1;min-width:0;">
+          <div class="player-name" style="font-size:13.5px;">${escapeHtml(p.name)}${guest? ` <span class="tag group-${p.group}" style="font-size:9px;">ospite ${p.group}</span>`:''}</div>
+        </div>
+        <input type="number" min="0" max="200" class="num lineup-min-input" placeholder="min" value="${mins}" data-min-input="${p.id}">
+        <span style="font-family:'Oswald',sans-serif;font-size:10px;color:var(--ink-soft);">min</span>
+        <button class="goal-btn" data-add-goal="${p.id}" title="Segna gol">⚽</button>
+        <button class="btn btn-danger btn-sm" data-remove-convoc="${p.id}" title="Togli dai convocati">✕</button>
+      </div>
+    `;
+  }).join('');
+
+  const goalsList = (m.goals||[]).slice().map(g=>{
+    const p = state.roster.find(pl=>pl.id===g.playerId);
+    return `<div class="goal-list-item">⚽
+      <input type="number" min="0" max="200" class="num" style="width:56px;" placeholder="min" value="${g.minute??''}" data-goal-minute="${g.id}">
+      ${p? escapeHtml(p.name):'Giocatore rimosso'}
+      <button class="btn btn-danger btn-sm" style="margin-left:auto;" data-remove-goal="${g.id}">Rimuovi</button>
+    </div>`;
+  }).join('') || `<div class="empty" style="padding:16px;">Nessun gol ancora.</div>`;
+
+  const nonConvChipsOwn = nonConvocatiOwn.map(p=>`<button class="chip" data-toggle-convoc="${p.id}">${p.number?p.number+' · ':''}${escapeHtml(p.name)}</button>`).join('') || `<div style="color:var(--ink-soft);font-size:13px;">Tutti i giocatori del gruppo ${m.group} sono convocati.</div>`;
+  const nonConvChipsOther = nonConvocatiOther.map(p=>`<button class="chip" data-toggle-convoc="${p.id}">${p.number?p.number+' · ':''}${escapeHtml(p.name)}</button>`).join('') || `<div style="color:var(--ink-soft);font-size:13px;">Nessun altro giocatore disponibile nel gruppo ${otherGroup}.</div>`;
+
+  return `
+    <div class="back-link" id="backToMatches">← Partite Gruppo ${m.group}</div>
+    <div class="match-header">
+      <div>
+        <h2 class="section-title" style="margin-bottom:2px;">vs ${escapeHtml(m.opponent||'—')} <span class="tag group-${m.group}">Gruppo ${m.group}</span></h2>
+        <div class="section-sub" style="margin-bottom:0;">${fmtDateLong(m.date)}</div>
+      </div>
+      <div class="score-editor">
+        <input type="number" min="0" class="num" value="${m.ourScore??0}" data-score="our">
+        <span>–</span>
+        <input type="number" min="0" class="num" value="${m.oppScore??0}" data-score="opp">
+      </div>
+    </div>
+    <div class="row" style="margin-bottom:16px;">
+      <div class="field">
+        <label>Stato</label>
+        <select id="matchStatus">
+          <option value="programmata" ${m.status==='programmata'?'selected':''}>Programmata</option>
+          <option value="in corso" ${m.status==='in corso'?'selected':''}>In corso</option>
+          <option value="conclusa" ${m.status==='conclusa'?'selected':''}>Conclusa</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>&nbsp;</label>
+        <button class="btn btn-danger" id="deleteMatchBtn" style="width:100%;">Elimina Partita</button>
+      </div>
+    </div>
+
+    <h2 class="section-title" style="font-size:15px;">Convocati &amp; Minuti</h2>
+    <div class="section-sub">Inserisci i minuti giocati a fine partita</div>
+    <div class="card" style="margin-bottom:18px;">
+      ${convocatiPlayers.length? lineupRows : `<div class="empty">Nessun convocato. Aggiungi giocatori dal gruppo ${m.group} qui sotto.</div>`}
+    </div>
+
+    <div class="field-panel card" style="margin-bottom:18px;">
+      <label style="margin-bottom:10px;">Aggiungi convocati dal gruppo ${m.group}</label>
+      <div class="chip-select">${nonConvChipsOwn}</div>
+    </div>
+
+    <div class="field-panel card" style="margin-bottom:18px;">
+      <label style="margin-bottom:10px;">Convoca come ospite dal gruppo ${otherGroup}</label>
+      <div class="chip-select">${nonConvChipsOther}</div>
+    </div>
+
+    <h2 class="section-title" style="font-size:15px;">Marcatori</h2>
+    <div class="card" style="margin-bottom:18px;">${goalsList}</div>
+
+    <h2 class="section-title" style="font-size:15px;">Note tattiche e tecniche — questa partita</h2>
+    <div class="card field-panel" style="margin-bottom:24px;">
+      <textarea class="notes-area" id="matchNotes" placeholder="Modulo, cambi, indicazioni tecniche e tattiche per questa partita…">${escapeHtml(m.matchNotes||'')}</textarea>
+      <div style="margin-top:10px;text-align:right;"><button class="btn btn-primary btn-sm" id="saveMatchNotesBtn">Salva Note</button></div>
+    </div>
+  `;
+}
+
+function renderStats(){
+  const byPlayer = {};
+  state.roster.forEach(p=> byPlayer[p.id] = {player:p, matches:[], totMin:0, totGol:0, totPresenze:0});
+  state.matches.forEach(m=>{
+    (m.convocati||[]).forEach(pid=>{
+      if(!byPlayer[pid]) return;
+      const mins = (m.minutes||{})[pid] || 0;
+      const gol = (m.goals||[]).filter(g=>g.playerId===pid).length;
+      byPlayer[pid].matches.push({opponent:m.opponent, date:m.date, group:m.group, minutes:mins, goals:gol});
+      byPlayer[pid].totMin += mins;
+      byPlayer[pid].totGol += gol;
+      byPlayer[pid].totPresenze += 1;
+    });
+  });
+  const list = Object.values(byPlayer).sort((a,b)=> b.totMin - a.totMin);
+  const blocks = list.map(entry=>{
+    const p = entry.player;
+    const expanded = state.expandedStatPlayer === p.id;
+    const historyRows = entry.matches.slice().sort((a,b)=>(b.date||'').localeCompare(a.date||'')).map(h=>`
+      <div class="match-history-item">
+        <span class="tag group-${h.group}">${h.group}</span>
+        vs ${escapeHtml(h.opponent||'—')} · ${fmtDateShort(h.date)} ·
+        <span class="num">${h.minutes}'</span> ${h.goals? `· <span class="num">${h.goals} gol</span>`:''}
+      </div>
+    `).join('') || `<div class="match-history-item">Nessuna partita registrata.</div>`;
+    return `
+      <div class="player-stat-block">
+        <div class="player-stat-head">
+          <div class="badge group-${p.group}" style="width:26px;height:26px;font-size:11px;">${p.number??'–'}</div>
+          <div>
+            <div class="player-name" style="font-size:14px;">${escapeHtml(p.name)}</div>
+            ${p.role? `<div class="role-tag">${escapeHtml(roleLabel(p))}</div>`:''}
+          </div>
+          <div class="player-stat-totals">${entry.totPresenze} presenze · ${entry.totMin}' · ${entry.totGol} gol</div>
+        </div>
+        <button class="stat-toggle" data-toggle-stat="${p.id}">${expanded? 'Nascondi storico ▲' : 'Mostra storico partite ▼'}</button>
+        ${expanded? historyRows : ''}
+      </div>
+    `;
+  }).join('');
+  return `
+    <h2 class="section-title">Statistiche</h2>
+    <div class="section-sub">${state.matches.length} partite registrate in totale · storico per giocatore</div>
+    <div class="card">${blocks || `<div class="empty">Nessun dato ancora.</div>`}</div>
+  `;
+}
+
+function escapeHtml(s){
+  return String(s??'').replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+function fmtDateShort(d){
+  if(!d) return '—';
+  const dt = new Date(d+'T00:00:00');
+  if(isNaN(dt)) return d;
+  return dt.toLocaleDateString('it-IT',{day:'2-digit',month:'short'});
+}
+function fmtDateLong(d){
+  if(!d) return '';
+  const dt = new Date(d+'T00:00:00');
+  if(isNaN(dt)) return d;
+  return dt.toLocaleDateString('it-IT',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
+}
+
+/* ---------- Modals ---------- */
+function openPlayerModal(player){
+  state.modal = { type:'player', player: player? {...player} : {id:null,name:'',number:'',group: '', role:'', subrole:''} };
+  render();
+}
+function roleOptionsHtml(selectedRole){
+  return Object.keys(ROLES).map(r=>`<option value="${r}" ${selectedRole===r?'selected':''}>${r}</option>`).join('');
+}
+function subroleOptionsHtml(role, selectedSubrole){
+  const subs = ROLES[role] || [];
+  if(!subs.length) return '<option value="">—</option>';
+  return '<option value="">—</option>' + subs.map(s=>`<option value="${s}" ${selectedSubrole===s?'selected':''}>${s}</option>`).join('');
+}
+function renderModal(){
+  const root = document.getElementById('root');
+  const wrap = document.createElement('div');
+  const m = state.modal;
+  if(m.type==='player'){
+    const p = m.player;
+    wrap.innerHTML = `
+      <div class="modal-backdrop" id="modalBackdrop">
+        <div class="modal">
+          <h3>${p.id? 'Modifica Giocatore':'Nuovo Giocatore'}</h3>
+          <div class="field"><label>Nome</label><input id="mpName" value="${escapeHtml(p.name)}" placeholder="Nome e cognome"></div>
+          <div class="row">
+            <div class="field"><label>Numero maglia</label><input id="mpNumber" type="number" min="1" max="99" value="${p.number??''}"></div>
+            <div class="field"><label>Gruppo</label>
+              <select id="mpGroup">
+                <option value="" ${p.group===''?'selected':''}>Non assegnato</option>
+                <option value="A" ${p.group==='A'?'selected':''}>A</option>
+                <option value="B" ${p.group==='B'?'selected':''}>B</option>
+              </select>
+            </div>
+          </div>
+          <div class="row">
+            <div class="field"><label>Ruolo</label>
+              <select id="mpRole"><option value="">—</option>${roleOptionsHtml(p.role)}</select>
+            </div>
+            <div class="field"><label>Sottoruolo</label>
+              <select id="mpSubrole">${subroleOptionsHtml(p.role, p.subrole)}</select>
+            </div>
+          </div>
+          <div class="modal-actions">
+            <button class="btn btn-ghost" id="modalCancel">Annulla</button>
+            <button class="btn btn-accent" id="modalSavePlayer">Salva</button>
+          </div>
+        </div>
+      </div>`;
+  } else if(m.type==='match'){
+    wrap.innerHTML = `
+      <div class="modal-backdrop" id="modalBackdrop">
+        <div class="modal">
+          <h3>Nuova Partita — Gruppo ${state.matchesGroupTab}</h3>
+          <div class="field"><label>Avversario</label><input id="mmOpponent" placeholder="Nome squadra avversaria"></div>
+          <div class="field"><label>Data</label><input id="mmDate" type="date"></div>
+          <div class="modal-actions">
+            <button class="btn btn-ghost" id="modalCancel">Annulla</button>
+            <button class="btn btn-accent" id="modalSaveMatch">Crea</button>
+          </div>
+        </div>
+      </div>`;
+  } else if(m.type==='confirm'){
+    const isStage2 = m.stage===2;
+    wrap.innerHTML = `
+      <div class="modal-backdrop" id="modalBackdrop">
+        <div class="modal">
+          <h3>${isStage2? 'Sei sicuro?' : 'Conferma'}</h3>
+          <div style="font-size:14px;line-height:1.5;color:var(--ink);">${escapeHtml(isStage2? m.message2 : m.message1)}</div>
+          <div class="modal-actions">
+            <button class="btn btn-ghost" id="modalCancel">Annulla</button>
+            <button class="btn btn-danger" id="modalConfirmNext" style="border-color:var(--red);background:${isStage2?'var(--red)':'transparent'};color:${isStage2?'#fff':'var(--red)'};">${isStage2? 'Sì, elimina definitivamente' : 'Continua'}</button>
+          </div>
+        </div>
+      </div>`;
+  }
+  root.appendChild(wrap.firstElementChild);
+  document.getElementById('modalBackdrop').addEventListener('click', (e)=>{ if(e.target.id==='modalBackdrop'){ state.modal=null; render(); } });
+  document.getElementById('modalCancel').onclick = ()=>{ state.modal=null; render(); };
+  if(m.type==='player'){
+    const roleSel = document.getElementById('mpRole');
+    roleSel.onchange = ()=>{
+      document.getElementById('mpSubrole').innerHTML = subroleOptionsHtml(roleSel.value, '');
+    };
+    document.getElementById('modalSavePlayer').onclick = async ()=>{
+      const name = document.getElementById('mpName').value.trim();
+      const number = document.getElementById('mpNumber').value;
+      const group = document.getElementById('mpGroup').value;
+      const role = document.getElementById('mpRole').value;
+      const subrole = document.getElementById('mpSubrole').value;
+      if(!name){ showToast('Inserisci un nome'); return; }
+      if(m.player.id){
+        const existing = state.roster.find(x=>x.id===m.player.id);
+        existing.name = name; existing.number = number? parseInt(number,10):null; existing.group = group;
+        existing.role = role; existing.subrole = subrole;
+      } else {
+        state.roster.push({id:uid(), name, number: number? parseInt(number,10):null, group, role, subrole});
+      }
+      await saveRoster();
+      state.modal = null;
+      state.rosterGroupFilter = group;
+      render();
+    };
+  } else if(m.type==='match'){
+    document.getElementById('modalSaveMatch').onclick = async ()=>{
+      const opponent = document.getElementById('mmOpponent').value.trim();
+      const date = document.getElementById('mmDate').value;
+      if(!opponent){ showToast("Inserisci l'avversario"); return; }
+      const newMatch = {id:uid(), group: state.matchesGroupTab, opponent, date: date || new Date().toISOString().slice(0,10), status:'programmata', ourScore:0, oppScore:0, convocati:[], minutes:{}, goals:[], matchNotes:''};
+      state.matches.push(newMatch);
+      await saveMatches();
+      state.modal = null;
+      state.openMatchId = newMatch.id;
+      render();
+    };
+  } else if(m.type==='confirm'){
+    document.getElementById('modalConfirmNext').onclick = async ()=>{
+      if(m.stage===1){
+        state.modal = {...m, stage:2};
+        render();
+      } else {
+        const cb = m.onConfirm;
+        state.modal = null;
+        render();
+        if(cb) await cb();
+      }
+    };
+  }
+}
+
+/* ---------- Event delegation for content ---------- */
+function attachContentHandlers(){
+  const main = document.getElementById('mainContent');
+  if(!main) return;
+
+  // Rosa
+  main.querySelectorAll('[data-group-filter]').forEach(b=> b.onclick = ()=>{ state.rosterGroupFilter = b.dataset.groupFilter; render(); });
+  const addPlayerBtn = document.getElementById('addPlayerBtn');
+  if(addPlayerBtn) addPlayerBtn.onclick = ()=> openPlayerModal(null);
+  main.querySelectorAll('[data-edit-player]').forEach(b=> b.onclick = ()=>{
+    const p = state.roster.find(x=>x.id===b.dataset.editPlayer);
+    openPlayerModal(p);
+  });
+  main.querySelectorAll('[data-unassign-player]').forEach(b=> b.onclick = async ()=>{
+    const p = state.roster.find(x=>x.id===b.dataset.unassignPlayer);
+    if(!p) return;
+    p.group = '';
+    await saveRoster();
+    showToast(`${p.name} spostato in Non assegnati`);
+    render();
+  });
+  main.querySelectorAll('[data-del-player]').forEach(b=> b.onclick = ()=>{
+    const p = state.roster.find(x=>x.id===b.dataset.delPlayer);
+    const pid = b.dataset.delPlayer;
+    askDoubleConfirm(
+      `Eliminare definitivamente ${p? p.name : 'questo giocatore'} dalla rosa?`,
+      `Questa azione non si può annullare: ${p? p.name : 'il giocatore'} verrà cancellato del tutto, incluso il suo storico partite. Se vuoi solo toglierlo da un gruppo, usa "Togli dal gruppo" invece.`,
+      async ()=>{
+        state.roster = state.roster.filter(x=>x.id!==pid);
+        await saveRoster();
+        render();
+      }
+    );
+  });
+  main.querySelectorAll('[data-set-group]').forEach(b=> b.onclick = async ()=>{
+    const [pid, targetGroup] = b.dataset.setGroup.split('|');
+    const p = state.roster.find(x=>x.id===pid);
+    if(!p) return;
+    p.group = targetGroup;
+    await saveRoster();
+    showToast(`${p.name} assegnato al gruppo ${targetGroup}`);
+    render();
+  });
+
+  // Partite list
+  main.querySelectorAll('[data-matches-group]').forEach(b=> b.onclick = ()=>{ state.matchesGroupTab = b.dataset.matchesGroup; render(); });
+  const addMatchBtn = document.getElementById('addMatchBtn');
+  if(addMatchBtn) addMatchBtn.onclick = ()=>{ state.modal = {type:'match'}; render(); };
+  main.querySelectorAll('[data-open-match]').forEach(b=> b.onclick = ()=>{ state.openMatchId = b.dataset.openMatch; render(); });
+
+  // Match detail
+  const backLink = document.getElementById('backToMatches');
+  if(backLink) backLink.onclick = ()=>{ state.openMatchId=null; render(); };
+  const delMatchBtn = document.getElementById('deleteMatchBtn');
+  if(delMatchBtn) delMatchBtn.onclick = ()=>{
+    const matchId = state.openMatchId;
+    askDoubleConfirm(
+      'Eliminare questa partita e tutti i suoi dati (convocati, minuti, gol, note)?',
+      'Questa azione non si può annullare. Tutti i dati di questa partita andranno persi definitivamente.',
+      async ()=>{
+        state.matches = state.matches.filter(m=>m.id!==matchId);
+        await saveMatches();
+        state.openMatchId = null;
+        render();
+      }
+    );
+  };
+  main.querySelectorAll('[data-score]').forEach(inp=> inp.onchange = async ()=>{
+    const m = state.matches.find(x=>x.id===state.openMatchId);
+    if(inp.dataset.score==='our') m.ourScore = parseInt(inp.value,10)||0;
+    else m.oppScore = parseInt(inp.value,10)||0;
+    await saveMatches();
+  });
+  const statusSel = document.getElementById('matchStatus');
+  if(statusSel) statusSel.onchange = async ()=>{
+    const m = state.matches.find(x=>x.id===state.openMatchId);
+    m.status = statusSel.value;
+    await saveMatches();
+    render();
+  };
+  main.querySelectorAll('[data-min-input]').forEach(inp=> inp.onchange = ()=> setPlayerMinutes(state.openMatchId, inp.dataset.minInput, inp.value));
+  main.querySelectorAll('[data-add-goal]').forEach(b=> b.onclick = ()=> addGoal(state.openMatchId, b.dataset.addGoal));
+  main.querySelectorAll('[data-remove-goal]').forEach(b=> b.onclick = ()=> removeGoal(state.openMatchId, b.dataset.removeGoal));
+  main.querySelectorAll('[data-goal-minute]').forEach(inp=> inp.onchange = ()=> setGoalMinute(state.openMatchId, inp.dataset.goalMinute, inp.value));
+  main.querySelectorAll('[data-toggle-convoc]').forEach(b=> b.onclick = async ()=>{
+    const m = state.matches.find(x=>x.id===state.openMatchId);
+    if(!m.convocati) m.convocati=[];
+    m.convocati.push(b.dataset.toggleConvoc);
+    await saveMatches();
+    render();
+  });
+  main.querySelectorAll('[data-remove-convoc]').forEach(b=> b.onclick = async ()=>{
+    const m = state.matches.find(x=>x.id===state.openMatchId);
+    if(!m.convocati) return;
+    m.convocati = m.convocati.filter(id=>id!==b.dataset.removeConvoc);
+    await saveMatches();
+    render();
+  });
+  const saveMatchNotesBtn = document.getElementById('saveMatchNotesBtn');
+  if(saveMatchNotesBtn) saveMatchNotesBtn.onclick = async ()=>{
+    const m = state.matches.find(x=>x.id===state.openMatchId);
+    m.matchNotes = document.getElementById('matchNotes').value;
+    await saveMatches();
+    showToast('Note salvate');
+  };
+
+  // Stats
+  main.querySelectorAll('[data-toggle-stat]').forEach(b=> b.onclick = ()=>{
+    state.expandedStatPlayer = state.expandedStatPlayer === b.dataset.toggleStat ? null : b.dataset.toggleStat;
+    render();
+  });
+}
+
+checkAuth();
+</script>
+</body>
+</html>
