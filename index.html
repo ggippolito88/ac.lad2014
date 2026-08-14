@@ -172,6 +172,7 @@ let state = {
   password: null,
   roster: [],
   matches: [],
+  matches2013: [],
   tab: 'rosa',
   rosterGroupFilter: '',
   matchesGroupTab: 'A', // used only when tab==='partite'
@@ -209,6 +210,24 @@ function showToast(msg){
 const JSONBIN_BIN_ID = "6a7e1de2da38895dfee131cb";
 const JSONBIN_MASTER_KEY = "$2a$10$ZrAd8OJddjAXn/ROxWNyM.aVKA57xtYUtsCsvQoiyzwK0CP1T1Oba";
 const JSONBIN_BASE_URL = "https://api.jsonbin.io/v3/b/" + JSONBIN_BIN_ID;
+
+const JSONBIN_BIN_ID_2013 = "6a7f3d2cf5f4af5e2916bb26";
+const JSONBIN_BASE_URL_2013 = "https://api.jsonbin.io/v3/b/" + JSONBIN_BIN_ID_2013;
+
+async function fetchMatches2013(){
+  try{
+    const res = await fetch(JSONBIN_BASE_URL_2013 + "/latest", {
+      headers: { "X-Master-Key": JSONBIN_MASTER_KEY }
+    });
+    if(!res.ok) throw new Error('HTTP ' + res.status);
+    const json = await res.json();
+    const data = json.record || {};
+    return Array.isArray(data.matches) ? data.matches : [];
+  }catch(e){
+    console.error('fetchMatches2013 failed', e);
+    return [];
+  }
+}
 
 function sleep(ms){ return new Promise(r=>setTimeout(r,ms)); }
 
@@ -277,6 +296,7 @@ async function checkAuth(){
   state.authChecked = true;
   state.loadError = false;
   render();
+  fetchMatches2013().then(m=>{ state.matches2013 = m; if(state.authed) render(); });
 }
 
 async function handleLoginSubmit(){
@@ -338,6 +358,8 @@ function startPolling(){
       state.matches = data.matches;
       render();
     }
+    const m2013 = await fetchMatches2013();
+    if(m2013) state.matches2013 = m2013;
   }, 7000);
 }
 
@@ -648,7 +670,7 @@ function renderMatchDetail(){
 
 function renderStats(){
   const byPlayer = {};
-  state.roster.forEach(p=> byPlayer[p.id] = {player:p, matches:[], totMin:0, totGol:0, totPresenze:0});
+  state.roster.forEach(p=> byPlayer[p.id] = {player:p, matches:[], matches2013:[], totMin:0, totGol:0, totPresenze:0});
   state.matches.forEach(m=>{
     (m.convocati||[]).forEach(pid=>{
       if(!byPlayer[pid]) return;
@@ -658,6 +680,14 @@ function renderStats(){
       byPlayer[pid].totMin += mins;
       byPlayer[pid].totGol += gol;
       byPlayer[pid].totPresenze += 1;
+    });
+  });
+  (state.matches2013||[]).forEach(m=>{
+    (m.convocati||[]).forEach(pid=>{
+      if(!byPlayer[pid]) return;
+      const mins = (m.minutes||{})[pid] || 0;
+      const gol = (m.goals||[]).filter(g=>g.playerId===pid).length;
+      byPlayer[pid].matches2013.push({opponent:m.opponent, date:m.date, minutes:mins, goals:gol});
     });
   });
   const list = Object.values(byPlayer).sort((a,b)=> b.totMin - a.totMin);
@@ -671,6 +701,13 @@ function renderStats(){
         <span class="num">${h.minutes}'</span> ${h.goals? `· <span class="num">${h.goals} gol</span>`:''}
       </div>
     `).join('') || `<div class="match-history-item">Nessuna partita registrata.</div>`;
+    const history2013Rows = entry.matches2013.slice().sort((a,b)=>(b.date||'').localeCompare(a.date||'')).map(h=>`
+      <div class="match-history-item">
+        <span class="tag" style="background:rgba(217,164,65,0.18);color:var(--amber-deep,#B5822B);">2013</span>
+        vs ${escapeHtml(h.opponent||'—')} · ${fmtDateShort(h.date)} ·
+        <span class="num">${h.minutes}'</span> ${h.goals? `· <span class="num">${h.goals} gol</span>`:''}
+      </div>
+    `).join('');
     return `
       <div class="player-stat-block">
         <div class="player-stat-head">
@@ -683,6 +720,7 @@ function renderStats(){
         </div>
         <button class="stat-toggle" data-toggle-stat="${p.id}">${expanded? 'Nascondi storico ▲' : 'Mostra storico partite ▼'}</button>
         ${expanded? historyRows : ''}
+        ${expanded && entry.matches2013.length? `<div style="padding:6px 0 4px 42px;font-family:'Oswald',sans-serif;font-size:9.5px;letter-spacing:1px;text-transform:uppercase;color:var(--ink-soft);">Presenze extra con il gruppo 2013 (non incluse nei totali sopra)</div>${history2013Rows}` : ''}
       </div>
     `;
   }).join('');
