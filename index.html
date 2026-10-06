@@ -852,7 +852,7 @@ function render(){
   attachContentHandlers();
   const mxw = document.getElementById('mxWrap');
   if(mxw){
-    mxw.scrollLeft = (state.mxScrollLeft==null) ? mxw.scrollWidth : state.mxScrollLeft;
+    mxw.scrollLeft = state.mxScrollLeft || 0;
     mxw.addEventListener('scroll', ()=>{ state.mxScrollLeft = mxw.scrollLeft; });
   }
   if(state.modal) renderModal();
