@@ -92,6 +92,24 @@ label{font-family:'Oswald',sans-serif;font-size:10.5px;letter-spacing:1.2px;text
 .mx-chip.T13{background:rgba(217,164,65,0.22);color:#8A6016;}
 .mx-chip.skip{background:var(--white);border:1.5px dashed var(--red);color:var(--red);padding:1px 6px;}
 .mx-reason{display:block;font-size:10px;color:var(--ink-soft);line-height:1.25;}
+.tr-wrap{overflow-x:auto;}
+.tr{border-collapse:collapse;width:100%;font-size:12.5px;}
+.tr th{font-family:'Oswald',sans-serif;font-size:10.5px;letter-spacing:1px;text-transform:uppercase;color:var(--ink-soft);padding:8px 3px;border-bottom:2px solid var(--line);text-align:center;white-space:nowrap;}
+.tr th small{display:block;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0;text-transform:none;color:var(--navy);margin-top:2px;}
+.tr td{padding:6px 3px;border-bottom:1px solid var(--line);text-align:center;vertical-align:middle;}
+.tr th.first,.tr td.first{text-align:left;position:sticky;left:0;background:var(--white);z-index:1;min-width:104px;max-width:140px;font-weight:600;font-size:12.5px;padding-left:10px;border-right:1px solid var(--line);}
+.tr-sq{width:36px;height:36px;border-radius:8px;border:1.5px solid var(--line);background:var(--white);cursor:pointer;font-size:17px;line-height:1;color:#fff;font-weight:700;padding:0;}
+.tr-sq.P{background:#2E9E5B;border-color:#2E9E5B;}
+.tr-sq.A{background:var(--red);border-color:var(--red);}
+.tr-sum{display:inline-flex;width:36px;height:36px;border-radius:8px;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;font-weight:700;font-size:14px;background:var(--paper-2);color:var(--ink-soft);}
+.tr-sum.s3{background:#2E9E5B;color:#fff;}
+.tr-sum.s2{background:#F08C1B;color:#fff;}
+.tr-sum.s1{background:var(--red);color:#fff;}
+.tr-sum.s0{background:#111;color:#fff;}
+.week-nav{display:flex;align-items:center;gap:8px;margin-bottom:14px;}
+.week-nav .week-label{flex:1;text-align:center;font-family:'Oswald',sans-serif;font-size:12.5px;letter-spacing:1px;text-transform:uppercase;color:var(--navy);}
+.tr-legend{display:flex;flex-wrap:wrap;gap:6px 12px;align-items:center;font-size:12px;color:var(--ink-soft);margin-bottom:12px;}
+.tr-legend .tr-sq,.tr-legend .tr-sum{width:18px;height:18px;border-radius:4px;font-size:10px;cursor:default;display:inline-flex;align-items:center;justify-content:center;vertical-align:middle;}
 .mx-legend{display:flex;flex-wrap:wrap;gap:8px;align-items:center;font-size:12px;color:var(--ink-soft);margin-bottom:12px;}
 .role-tag{font-family:'Oswald',sans-serif;font-size:10px;letter-spacing:0.5px;color:var(--ink-soft);}
 .divider{height:1px;background:var(--line);margin:0;}
@@ -577,6 +595,10 @@ let state = {
   roster: [],
   matches: [],
   matches2013: [],
+  trainings: {},
+  trainGroup: 'A',
+  trainWeekOffset: 0,
+  saving: false,
   tab: 'rosa',
   rosterGroupFilter: '',
   matchesGroupTab: 'A', // used only when tab==='partite'
@@ -647,6 +669,7 @@ async function fetchCloudData(){
       authPassword: data.authPassword || null,
       roster: Array.isArray(data.roster) ? data.roster : [],
       matches: Array.isArray(data.matches) ? data.matches : [],
+      trainings: (data.trainings && typeof data.trainings === 'object' && !Array.isArray(data.trainings)) ? data.trainings : {},
     };
   }catch(e){
     console.error('fetchCloudData failed', e);
@@ -679,7 +702,7 @@ async function pushCloudData(dataObj, attempt){
 }
 
 function currentCloudSnapshot(){
-  return { authPassword: state.password, roster: state.roster, matches: state.matches };
+  return { authPassword: state.password, roster: state.roster, matches: state.matches, trainings: state.trainings };
 }
 
 async function saveRoster(){ await pushCloudData(currentCloudSnapshot()); }
@@ -696,6 +719,7 @@ async function checkAuth(){
   state.password = data.authPassword;
   state.roster = data.roster;
   state.matches = data.matches;
+  state.trainings = data.trainings;
   state.loginMode = state.password ? 'enter' : 'set';
   state.authChecked = true;
   state.loadError = false;
@@ -730,7 +754,7 @@ function logout(){ state.authed = false; state.loginInput=''; state.loginError='
 
 /* ---------- Backup export ---------- */
 function exportBackup(){
-  const data = { exportedAt: new Date().toISOString(), roster: state.roster, matches: state.matches };
+  const data = { exportedAt: new Date().toISOString(), roster: state.roster, matches: state.matches, trainings: state.trainings };
   const blob = new Blob([JSON.stringify(data,null,2)], {type:'application/json'});
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
@@ -754,12 +778,13 @@ function isEditingNow(){
 function startPolling(){
   if(window.__pollTimer) return;
   window.__pollTimer = setInterval(async ()=>{
-    if(!state.authed || isEditingNow()) return;
+    if(!state.authed || isEditingNow() || state.saving) return;
     const data = await fetchCloudData();
-    if(data){
+    if(data && !state.saving){
       state.password = data.authPassword;
       state.roster = data.roster;
       state.matches = data.matches;
+      state.trainings = data.trainings;
       render();
     }
     const m2013 = await fetchMatches2013();
@@ -832,6 +857,7 @@ function render(){
         ${tabBtn('rosa','Rosa')}
         ${tabBtn('partite','Partite')}
         ${tabBtn('giornate','Giornate')}
+        ${tabBtn('allenamenti','Allenamenti')}
         ${tabBtn('statistiche','Statistiche')}
       </div>
       <main id="mainContent"></main>
@@ -848,6 +874,7 @@ function render(){
     else main.innerHTML = renderPartiteList();
   }
   else if(state.tab==='giornate') main.innerHTML = renderGiornate();
+  else if(state.tab==='allenamenti') main.innerHTML = renderAllenamenti();
   else if(state.tab==='statistiche') main.innerHTML = renderStats();
   attachContentHandlers();
   const mxw = document.getElementById('mxWrap');
@@ -1003,6 +1030,118 @@ async function setAbsenceNote(matchId, pid, note){
   if(!m || !m.absences || !m.absences[pid]) return;
   m.absences[pid].note = note;
   await saveMatches();
+}
+
+const TRAIN_DAYS = [
+  {key:'mon', label:'Lun', offset:0},
+  {key:'tue', label:'Mar', offset:1},
+  {key:'thu', label:'Gio', offset:3},
+];
+function localISO(d){
+  return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
+}
+function weekMonday(offsetWeeks){
+  const t = new Date();
+  t.setHours(12,0,0,0);
+  t.setDate(t.getDate() - ((t.getDay()+6)%7) + offsetWeeks*7);
+  return t;
+}
+function trainingRecord(weekKey, group, pid){
+  const w = state.trainings[weekKey];
+  return (w && w[group] && w[group][pid]) || {};
+}
+function trainingSummary(rec){
+  const vals = TRAIN_DAYS.map(d=>rec[d.key]||'');
+  const present = vals.filter(v=>v==='P').length;
+  const recorded = vals.filter(v=>v!=='').length;
+  let cls = 'sN', txt = '–';
+  if(recorded){ txt = String(present); }
+  if(present===3) cls='s3';
+  else if(present===2) cls='s2';
+  else if(present===1) cls='s1';
+  else if(recorded===3) cls='s0';
+  return {cls, txt};
+}
+async function queueSaveTrainings(){
+  window.__trainDirty = true;
+  if(state.saving) return;
+  state.saving = true;
+  try{
+    while(window.__trainDirty){
+      window.__trainDirty = false;
+      await pushCloudData(currentCloudSnapshot());
+    }
+  } finally {
+    state.saving = false;
+  }
+}
+function cycleTraining(weekKey, group, pid, dayKey){
+  const cur = trainingRecord(weekKey, group, pid)[dayKey] || '';
+  const next = cur==='' ? 'P' : (cur==='P' ? 'A' : '');
+  if(!state.trainings[weekKey]) state.trainings[weekKey] = {};
+  if(!state.trainings[weekKey][group]) state.trainings[weekKey][group] = {};
+  const rec = Object.assign({}, state.trainings[weekKey][group][pid] || {});
+  if(next) rec[dayKey] = next; else delete rec[dayKey];
+  if(Object.keys(rec).length) state.trainings[weekKey][group][pid] = rec;
+  else delete state.trainings[weekKey][group][pid];
+  render();
+  queueSaveTrainings();
+}
+
+function renderAllenamenti(){
+  const g = state.trainGroup;
+  const monday = weekMonday(state.trainWeekOffset);
+  const weekKey = localISO(monday);
+  const days = TRAIN_DAYS.map(d=>{
+    const dt = new Date(monday);
+    dt.setDate(dt.getDate() + d.offset);
+    return {key:d.key, label:d.label, short: dt.getDate() + '/' + (dt.getMonth()+1)};
+  });
+  const wk = (state.trainings[weekKey] || {})[g] || {};
+  const ids = new Set(state.roster.filter(p=>p.group===g).map(p=>p.id));
+  Object.keys(wk).forEach(id=>ids.add(id));
+  const players = [...ids].map(id=>state.roster.find(p=>p.id===id)).filter(Boolean).sort(comparePlayers);
+  const weekLabel = state.trainWeekOffset===0 ? 'Questa settimana' : ('Settimana del ' + days[0].short);
+  const head = days.map(d=>`<th>${d.label}<small>${d.short}</small></th>`).join('');
+  const rows = players.map(p=>{
+    const rec = trainingRecord(weekKey, g, p.id);
+    const cells = days.map(d=>{
+      const v = rec[d.key] || '';
+      const mark = v==='P' ? '✓' : (v==='A' ? '✕' : '');
+      const label = d.label + ' ' + d.short + ': ' + (v==='P' ? 'presente' : v==='A' ? 'assente' : 'non segnato');
+      return `<td><button class="tr-sq ${v}" data-train="${weekKey}|${g}|${p.id}|${d.key}" aria-label="${escapeHtml(p.name)} ${label}">${mark}</button></td>`;
+    }).join('');
+    const sm = trainingSummary(rec);
+    return `<tr><td class="first">${p.number? p.number+' · ':''}${escapeHtml(p.name)}</td>${cells}<td><span class="tr-sum ${sm.cls}">${sm.txt}</span></td></tr>`;
+  }).join('');
+  return `
+    <h2 class="section-title">Allenamenti</h2>
+    <div class="section-sub">Lunedì · martedì · giovedì — tocca il quadratino per segnare</div>
+    <div class="group-toggle">
+      ${GROUPS.map(x=>`<button class="btn ${g===x?(x==='B'?'btn-accent':'btn-primary'):'btn-ghost'}" data-train-group="${x}">Gruppo ${x}</button>`).join('')}
+    </div>
+    <div class="week-nav">
+      <button class="btn btn-ghost btn-sm" data-train-week="-1" aria-label="Settimana precedente">‹</button>
+      <div class="week-label">${weekLabel}</div>
+      <button class="btn btn-ghost btn-sm" data-train-week="1" aria-label="Settimana successiva">›</button>
+      ${state.trainWeekOffset!==0 ? `<button class="btn btn-ghost btn-sm" data-train-week="0">Oggi</button>` : ''}
+    </div>
+    <div class="tr-legend">
+      <span><span class="tr-sq P">✓</span> presente</span>
+      <span><span class="tr-sq A">✕</span> assente</span>
+      <span><span class="tr-sq"></span> non segnato</span>
+    </div>
+    <div class="tr-legend">
+      <span>Riepilogo:</span>
+      <span><span class="tr-sum s3"></span> 3 allenamenti</span>
+      <span><span class="tr-sum s2"></span> 2</span>
+      <span><span class="tr-sum s1"></span> 1</span>
+      <span><span class="tr-sum s0"></span> mai presente</span>
+    </div>
+    <div class="card tr-wrap">
+      ${players.length ? `<table class="tr"><thead><tr><th class="first">Giocatore</th>${head}<th>Tot</th></tr></thead><tbody>${rows}</tbody></table>` : `<div class="empty">Nessun giocatore nel gruppo ${g}. Aggiungili dalla scheda Rosa.</div>`}
+    </div>
+  `;
 }
 
 function giornateModel(){
@@ -1533,6 +1672,16 @@ function attachContentHandlers(){
     showToast('Data aggiornata');
     render();
   };
+  main.querySelectorAll('[data-train-group]').forEach(b=> b.onclick = ()=>{ state.trainGroup = b.dataset.trainGroup; render(); });
+  main.querySelectorAll('[data-train-week]').forEach(b=> b.onclick = ()=>{
+    const v = b.dataset.trainWeek;
+    state.trainWeekOffset = v==='0' ? 0 : state.trainWeekOffset + parseInt(v,10);
+    render();
+  });
+  main.querySelectorAll('[data-train]').forEach(b=> b.onclick = ()=>{
+    const [wk, grp, pid, day] = b.dataset.train.split('|');
+    cycleTraining(wk, grp, pid, day);
+  });
   const pdfBtn = document.getElementById('pdfGiornateBtn');
   if(pdfBtn) pdfBtn.onclick = downloadGiornatePdf;
   const statusSel = document.getElementById('matchStatus');
